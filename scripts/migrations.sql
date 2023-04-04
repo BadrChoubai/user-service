@@ -1,0 +1,25 @@
+DROP DATABASE IF EXISTS user_service;
+CREATE DATABASE IF NOT EXISTS user_service;
+USE user_service;
+
+-- Create a sample table.
+CREATE TABLE users (
+  id INT NOT NULL AUTO_INCREMENT,
+  name VARCHAR(255) NOT NULL,
+  address VARCHAR(255) NOT NULL,
+  created VARCHAR(255) NOT NULL,
+  modified VARCHAR(255) NOT NULL,
+  PRIMARY KEY (id)
+) ENGINE=InnoDB CHARACTER SET utf8;
+
+INSERT INTO users VALUES
+(1, "Brook o'Connell", UNIX_TIMESTAMP(), UNIX_TIMESTAMP()),
+(2, 'Michael Ochoa', UNIX_TIMESTAMP(), UNIX_TIMESTAMP()),
+(3, 'Pierre Ramsey', UNIX_TIMESTAMP(), UNIX_TIMESTAMP()),
+(4, 'Walker Delgado', UNIX_TIMESTAMP(), UNIX_TIMESTAMP()),
+(5, 'Allison Montes', UNIX_TIMESTAMP(), UNIX_TIMESTAMP()),
+(6, 'William Scott', UNIX_TIMESTAMP(), UNIX_TIMESTAMP()),
+(7, 'Zaniya Bush', UNIX_TIMESTAMP(), UNIX_TIMESTAMP()),
+(8, 'Abby Tyler', UNIX_TIMESTAMP(), UNIX_TIMESTAMP()),
+(9, 'Ibrahim Patton', UNIX_TIMESTAMP(), UNIX_TIMESTAMP()),
+(10, 'Leon Maddox', UNIX_TIMESTAMP(), UNIX_TIMESTAMP());
