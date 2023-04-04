@@ -6,9 +6,8 @@ USE user_service;
 CREATE TABLE users (
   id INT NOT NULL AUTO_INCREMENT,
   name VARCHAR(255) NOT NULL,
-  address VARCHAR(255) NOT NULL,
   created VARCHAR(255) NOT NULL,
-  modified VARCHAR(255) NOT NULL,
+  updated VARCHAR(255) NOT NULL,
   PRIMARY KEY (id)
 ) ENGINE=InnoDB CHARACTER SET utf8;
 

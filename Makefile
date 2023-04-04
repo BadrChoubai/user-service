@@ -16,6 +16,10 @@ stop_service:
 	&& docker container rm user-service-fiber-application-1 \
 	&& docker image rm user-service
 
+.PHONE: generate_docs
+generate_docs:
+	~/go/bin/swag init -g ./internal/infrastructure/fiber.go
+
 .PHONY: test_e2e
 test_e2e:
 	sh ./scripts/test-e2e.sh
