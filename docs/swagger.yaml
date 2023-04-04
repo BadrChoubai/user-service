@@ -1,0 +1,61 @@
+basePath: /api/v1
+definitions:
+  service.ResponseHTTP:
+    properties:
+      data: {}
+      success:
+        type: boolean
+    type: object
+  service.User:
+    properties:
+      createdAt:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: TEAM_EMAIL
+    name: TEAM_NAME
+  description: RESTful service for managing users in DB Instance
+  license:
+    url: LICENSE_URL
+  title: User Service
+  version: "1.0"
+paths:
+  /users/{userId}:
+    get:
+      consumes:
+      - application/json
+      description: Get a single user
+      operationId: get-user
+      parameters:
+      - description: User Id
+        in: path
+        name: userId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/service.ResponseHTTP'
+            - properties:
+                data:
+                  $ref: '#/definitions/service.User'
+              type: object
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/service.ResponseHTTP'
+      tags:
+      - users
+swagger: "2.0"
