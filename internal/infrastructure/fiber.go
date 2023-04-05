@@ -37,6 +37,7 @@ func Run() {
 	mariadb, err := DBConnection()
 	if err != nil {
 		log.Fatal("Database Connection Failure: $s", err)
+		os.Exit(2)
 	}
 
 	app := fiber.New(fiber.Config{
@@ -45,7 +46,10 @@ func Run() {
 	})
 
 	app.Use(cors.New())
-	app.Use(logger.New(logger.ConfigDefault))
+	app.Use(logger.New(logger.Config{
+		Format:   "${cyan}[${time}] ${white}${pid} ${red}${status} ${blue}[${method}] ${white}${path}\n",
+		TimeZone: "UTC",
+	}))
 	app.Use(recover.New())
 	app.Use(requestid.New())
 
@@ -71,11 +75,15 @@ func Run() {
 	ctx, cancel := context.WithTimeout(context.Background(), IDLE_TIMEOUT)
 	defer cancel()
 
+	// log.Println("Closing Connection to Database")
+	// if err := mariadb.Close(); err != nil {
+	// 	log.Fatal("Graceful shutdown failed attempting to close database connection")
+	// }
+
 	if err := app.Shutdown(); err != nil {
-		log.Fatal("Graceful Shutdown Failed ", err)
+		log.Fatal("Graceful shutdown failed attempting to shutdown appplication server", err)
 	}
 
 	<-ctx.Done()
-	log.Println("Timeout of 5 Seconds")
-	log.Println("Service shut down successfully")
+	log.Println("Service Shut Down Successfully")
 }

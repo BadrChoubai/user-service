@@ -2,7 +2,8 @@ package service
 
 import (
 	"context"
-	"database/sql"
+
+	"gorm.io/gorm"
 )
 
 const (
@@ -10,10 +11,10 @@ const (
 )
 
 type dbRepository struct {
-	database *sql.DB
+	database *gorm.DB
 }
 
-func NewUserRepository(dbConnection *sql.DB) UserRepository {
+func NewUserRepository(dbConnection *gorm.DB) UserRepository {
 	return &dbRepository{
 		database: dbConnection,
 	}
@@ -21,23 +22,7 @@ func NewUserRepository(dbConnection *sql.DB) UserRepository {
 
 func (repository *dbRepository) SingleUserById(ctx context.Context, userId int) (*User, error) {
 	user := &User{}
-
-	statement, err := repository.database.PrepareContext(ctx, QUERY_GET_USER)
-	if err != nil {
-		return nil, err
-	}
-
-	defer statement.Close()
-
-	err = statement.QueryRow(ctx, userId).Scan(&user.ID, &user.Name, &user.CreatedAt, &user.UpdatedAt)
-
-	if err != nil && err == sql.ErrNoRows {
-		return nil, nil
-	}
-
-	if err != nil {
-		return nil, err
-	}
+	repository.database.Raw(QUERY_GET_USER, userId).Scan(&user)
 
 	return user, nil
 }

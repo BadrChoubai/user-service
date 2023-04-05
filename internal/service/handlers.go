@@ -2,7 +2,7 @@ package service
 
 import (
 	"context"
-	"fmt"
+	"log"
 	"time"
 
 	"github.com/gofiber/fiber/v2"
@@ -27,9 +27,9 @@ func NewUserHandler(baseServiceRoute fiber.Router, userService UserService) {
 		Max:        3,
 		Expiration: 10 * time.Second,
 		LimitReached: func(c *fiber.Ctx) error {
-			return c.Status(fiber.StatusTooManyRequests).JSON(&fiber.Map{
-				"status":  "fail",
-				"message": "You have requested too many in a single time-frame! Please wait another minute!",
+			return c.Status(fiber.StatusTooManyRequests).JSON(ResponseHTTP{
+				Success: false,
+				Data:    fiber.StatusTooManyRequests,
 			})
 		},
 	}))
@@ -37,22 +37,20 @@ func NewUserHandler(baseServiceRoute fiber.Router, userService UserService) {
 	baseServiceRoute.Get("/:userId", handler.GetSingleUser)
 }
 
-// @Description	Get a single user
-// @Id				get-user
-// @Tags			users
-// @Accept			json
-// @Produce		json
-// @Param			userId	path		int	true	"User Id"
-// @Success		200		{object}	ResponseHTTP{data=User}
-// @Failure		404		{object}	ResponseHTTP{}
-// @Router			/users/{userId} [get]
+//	@Description	Get a single user
+//	@Id				get-user
+//	@Tags			users
+//	@Accept			json
+//	@Produce		json
+//	@Param			userId	path		int	true	"User Id"
+//	@Success		200		{object}	ResponseHTTP{data=User}
+//	@Failure		404		{object}	ResponseHTTP{}
+//	@Router			/users/{userId} [get]
 func (handler *UserHandler) GetSingleUser(c *fiber.Ctx) error {
-	customContext, cancel := context.WithCancel(context.Background())
+	customContext, cancel := context.WithCancel(c.Context())
 	defer cancel()
 
 	userId, err := c.ParamsInt("userId")
-	fmt.Println(userId)
-
 	if err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(ResponseHTTP{
 			Success: false,
@@ -62,6 +60,7 @@ func (handler *UserHandler) GetSingleUser(c *fiber.Ctx) error {
 
 	user, err := handler.userService.GetUserById(customContext, userId)
 	if err != nil {
+		log.Print(err)
 		return c.Status(fiber.StatusInternalServerError).JSON(ResponseHTTP{
 			Success: false,
 			Data:    err.Error(),
