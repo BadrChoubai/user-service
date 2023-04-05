@@ -28,6 +28,32 @@ info:
   title: User Service
   version: "1.0"
 paths:
+  /users:
+    get:
+      consumes:
+      - application/json
+      description: Get all users
+      operationId: get-users
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/service.ResponseHTTP'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/service.User'
+                  type: array
+              type: object
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/service.ResponseHTTP'
+      tags:
+      - users
   /users/{userId}:
     get:
       consumes:

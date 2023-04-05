@@ -12,6 +12,10 @@ func NewUserService(userRepository UserRepository) UserService {
 	}
 }
 
+func (service *userService) GetAllUsers(ctx context.Context) (*[]User, error) {
+	return service.userRepository.AllUsers(ctx)
+}
+
 func (service *userService) GetUserById(ctx context.Context, userId int) (*User, error) {
 	return service.userRepository.SingleUserById(ctx, userId)
 }

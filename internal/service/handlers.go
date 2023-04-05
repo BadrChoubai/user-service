@@ -34,7 +34,36 @@ func NewUserHandler(baseServiceRoute fiber.Router, userService UserService) {
 		},
 	}))
 
+	baseServiceRoute.Get("", handler.GetUsers)
 	baseServiceRoute.Get("/:userId", handler.GetSingleUser)
+}
+
+//	@Description	Get all users
+//	@Id				get-users
+//	@Tags			users
+//	@Accept			json
+//	@Produce		json
+//	@Success		200	{object}	ResponseHTTP{data=[]User}
+//	@Failure		404	{object}	ResponseHTTP{}
+//	@Router			/users [get]
+func (handler *UserHandler) GetUsers(c *fiber.Ctx) error {
+	customContext, cancel := context.WithCancel(c.Context())
+	defer cancel()
+
+	users, err := handler.userService.GetAllUsers(customContext)
+	if err != nil {
+		log.Print(err)
+		return c.Status(fiber.StatusInternalServerError).JSON(ResponseHTTP{
+			Success: false,
+			Data:    err.Error(),
+		})
+	}
+
+	return c.Status(fiber.StatusOK).JSON(ResponseHTTP{
+		Success: true,
+		Data:    users,
+	})
+
 }
 
 //	@Description	Get a single user
@@ -71,5 +100,4 @@ func (handler *UserHandler) GetSingleUser(c *fiber.Ctx) error {
 		Success: true,
 		Data:    user,
 	})
-
 }

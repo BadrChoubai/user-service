@@ -9,6 +9,9 @@ echo "Running end-to-end testing..."; echo
 echo "$API_URL/api/health"
 curl $API_URL/api/health; echo;
 echo
+echo "$API_URL/api/v1/users"
+curl $API_URL/api/v1/users; echo;
+echo
 echo "$API_URL/api/v1/users/:userId"
 curl $API_URL/api/v1/users/1; echo;
 echo

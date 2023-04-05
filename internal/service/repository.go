@@ -7,7 +7,8 @@ import (
 )
 
 const (
-	QUERY_GET_USER = "SELECT * FROM users WHERE id = ?"
+	QUERY_GET_USERS = "SELECT * FROM users"
+	QUERY_GET_USER  = "SELECT * FROM users WHERE id = ?"
 )
 
 type dbRepository struct {
@@ -20,9 +21,17 @@ func NewUserRepository(dbConnection *gorm.DB) UserRepository {
 	}
 }
 
+func (repository *dbRepository) AllUsers(ctx context.Context) (*[]User, error) {
+	users := &[]User{}
+
+	repository.database.WithContext(ctx).Raw(QUERY_GET_USERS).Scan(&users)
+
+	return users, nil
+}
+
 func (repository *dbRepository) SingleUserById(ctx context.Context, userId int) (*User, error) {
 	user := &User{}
-	repository.database.Raw(QUERY_GET_USER, userId).Scan(&user)
+	repository.database.WithContext(ctx).Raw(QUERY_GET_USER, userId).Scan(&user)
 
 	return user, nil
 }

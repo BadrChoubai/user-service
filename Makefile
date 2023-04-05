@@ -18,7 +18,8 @@ stop_service:
 
 .PHONE: generate_docs
 generate_docs:
-	~/go/bin/swag init -g ./internal/infrastructure/fiber.go
+	~/go/bin/swag fmt \
+	&& ~/go/bin/swag init -g ./internal/infrastructure/fiber.go
 
 .PHONY: test_e2e
 test_e2e:

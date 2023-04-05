@@ -13,9 +13,11 @@ type User struct {
 }
 
 type UserRepository interface {
+	AllUsers(ctx context.Context) (*[]User, error)
 	SingleUserById(ctx context.Context, userId int) (*User, error)
 }
 
 type UserService interface {
+	GetAllUsers(ctx context.Context) (*[]User, error)
 	GetUserById(ctx context.Context, userId int) (*User, error)
 }
