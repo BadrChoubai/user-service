@@ -25,14 +25,14 @@ const (
 	IDLE_TIMEOUT = 5 * time.Second
 )
 
-// @title			User Service
-// @version		1.0
-// @description	RESTful service for managing users in DB Instance
-// @contact.name	TEAM_NAME
-// @contact.email	TEAM_EMAIL
-// @license.url	LICENSE_URL
-// @host			localhost:8080
-// @BasePath		/api/v1
+//	@title			User Service
+//	@version		1.0
+//	@description	RESTful service for managing users in DB Instance
+//	@contact.name	TEAM_NAME
+//	@contact.email	TEAM_EMAIL
+//	@license.url	LICENSE_URL
+//	@host			localhost:8080
+//	@BasePath		/api/v1
 func Run() {
 	mariadb, err := DBConnection()
 	if err != nil {
